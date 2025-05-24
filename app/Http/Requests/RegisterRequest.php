@@ -29,7 +29,6 @@ class RegisterRequest extends FormRequest
                 'required',
                 'string',
                 'min:8',
-                'confirmed',
                 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}$/'
             ],
             'role' => 'in:admin,user',
