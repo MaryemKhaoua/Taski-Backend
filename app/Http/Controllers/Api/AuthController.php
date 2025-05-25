@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-namespace App\Http\Controllers;
-
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
@@ -13,25 +12,21 @@ use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request): JsonResponse
+
+    public function register(RegisterRequest $request)
     {
         $user = User::create([
+            'username' => $request->username,
             'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'username'   => $request->username,
-            'password'   => Hash::make($request->password),
-            'role'       => $request->role ?? 'user',
+            'last_name' => $request->last_name,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
-
         return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user,
+            'message' => 'User registered successfully',
         ], 201);
     }
-
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only('username', 'password');
@@ -46,7 +41,6 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
-            'user'         => $user,
         ]);
     }
 
@@ -62,8 +56,8 @@ class AuthController extends Controller
         return response()->json(auth()->user());
     }
 
-    public function test(): JsonResponse
-    {
-        return response()->json(['message' => 'test workk']);
-    }
+//    public function test(): JsonResponse
+//    {
+//        return response()->json(['message' => 'test workk']);
+//    }
 }
