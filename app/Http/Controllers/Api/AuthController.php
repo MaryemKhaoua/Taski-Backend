@@ -47,14 +47,14 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'User registered successfully'], 201);
     }
-    
+
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
             'password' => 'required|string',
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Invalid login data.',
@@ -76,8 +76,14 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type'   => 'Bearer',
+            'user'         => [
+                'id'       => $user->id,
+                'username' => $user->username,
+                'role'     => $user->role,
+            ],
         ], 200);
     }
+
 
     public function logout(): JsonResponse
     {
@@ -90,9 +96,4 @@ class AuthController extends Controller
     {
         return response()->json(auth()->user());
     }
-
-//    public function test(): JsonResponse
-//    {
-//        return response()->json(['message' => 'test workk']);
-//    }
 }
